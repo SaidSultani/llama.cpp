@@ -96,7 +96,7 @@ execve needs `/mnt/c/...` as argv0; a raw `C:\\...` raises FileNotFoundError
 ## End-to-end proven — 2026-11-08
 
 Playwright run against the service serving the built UI, **rc=0** (evidence:
-`~/.hermes/cache/scratch/e2e-local-ai/` — screenshots + `result.json`):
+`evidence/e2e-2026-11-08/` — screenshots + `result.json` + the run script):
 
 - `/control` page renders: 8 runtime rows, model store, 5 bench rows, sidebar
   "Local AI" entry. The UI runs `router.type: 'hash'`, so the link is
@@ -106,8 +106,8 @@ Playwright run against the service serving the built UI, **rc=0** (evidence:
   `exited (rc N)`, not `stopped`).
 - Chat: composer in the forked UI → service proxy → `llama-server` (b9189,
   Qwen3-0.6B Q4_K_M) streamed a reply containing `PONG`; post-readiness
-  console clean (0 errors / 0 page errors). Allowlists documented in the run
-  script: the model-load 503 storm (cleared only after `/v1/models` AND
+  console clean (0 errors / 0 page errors). Allowlists documented in the
+  archived run script: the model-load 503 storm (cleared only after `/v1/models` AND
   `/props` both answer 200 twice), upstream's `/tools` feature probe, and the
   `/v1/streams/lookup` version skew (v0.9.0 UI vs b9189 server, graceful
   fallback).

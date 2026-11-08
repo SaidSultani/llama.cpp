@@ -1,0 +1,17 @@
+{
+ "rows": 8,
+ "bench_rows": 5,
+ "chat_ok": true,
+ "step_failed_at": null,
+ "pre_ready": {
+  "console": 26,
+  "pageerrors": 1
+ },
+ "posts": [
+  "200 POST /ctl/runtimes/wsl-cpu-b9189/stop",
+  "200 POST /ctl/runtimes/wsl-cpu-b9189/start",
+  "200 POST /ctl/runtimes/wsl-cpu-b9189/activate"
+ ],
+ "console": [],
+ "pageerrors": []
+}
