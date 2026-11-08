@@ -42,6 +42,9 @@ python3 -m unittest test_control.py -v   # suite (fake runtime, no real servers)
 | `wsl-vulkan-10066` | llama.cpp b10066 Vulkan          | vulkan    | WSL      |
 | `win-cpu`          | llama-cpp-build (Clang ARM64)    | cpu       | Windows  |
 | `win-npu-hexagon`  | llama_cpp_hexagon QNN build      | npu       | Windows  |
+| `win-opencl-cpu`   | llama-cpp-backends cpu-opencl-built | cpu    | Windows  |
+| `win-opencl-adreno` | llama-cpp-backends opencl-adreno (b10066) | gpu | Windows |
+| `win-npu-custom`   | llama-cpp-backends npu-built (custom HTP) | npu | Windows |
 | `geniex-serve`     | GenieX CLI v0.5.0 serve          | default   | Windows  |
 | `geniex-serve-npu` | GenieX CLI serve `-c npu`        | npu       | Windows  |
 | `geniex-serve-cpu` | GenieX CLI serve `-c cpu`        | cpu       | Windows  |
@@ -64,15 +67,17 @@ computes with `-c cpu|gpu|npu|hybrid` at startup (v0.5.0 help verified).
 
 ## Honest status notes
 
-- `win-npu-hexagon` is **unverified**: comparable QNN builds died at
-  session-open `0x72`. Start it and read `/log` — a crash is information.
+- `win-npu-hexagon` is **verified failing** (smoke below): session-open
+  `0x80000406` -> `GGML_ASSERT(device)`. Read `/log` — a crash is information.
 - The GenieX `-c npu` path crashed inside `geniex_llm_create` on v0.5.0 in
   August; the separate v0.10.0 bench bundle proves HTP0 works (2026-11-08:
   npu prefill 2275 / decode 31.1 t/s). The serve entry exists to learn
   whether v0.5.0 serve differs from v0.5.0 infer.
-- `llama-cpp-backends/` (3 more Windows variants incl. `cpu-opencl-built`)
-  is not wired in yet — classified variants can be added to
-  `runtimes.json` without touching code.
+- `llama-cpp-backends/` is **wired** (2026-11-08): `cpu-opencl-built`,
+  `opencl-adreno`, `npu-built` added as runtimes. `cpu/` skipped (dup of
+  `win-cpu`'s class, b10066 zip) and `$InstallDir/` skipped (literal
+  unexpanded-variable installer artifact). Note: `cpu-opencl-built` ships
+  NO `ggml-opencl.dll` — CPU-only despite the dir name.
 
 ## Verified live smoke — 2026-11-08
 
@@ -83,9 +88,15 @@ service, start -> observe -> stop:
 | ------------------ | -------------------------------------------------------------- |
 | `wsl-cpu-b9189`    | up, health in 0.5 s, model loads from `/mnt/c/...` cache; `/v1/models` returns 503 **while the model is still loading** (server by design), stop SIGTERM clean |
 | `geniex-serve`     | serving `0.0.0.0:18181` ("Local hosting" in log); first NAT health probe said False — the WSL->Windows probe path is flaky (see networking caveats), stop clean |
-| `geniex-serve-npu` | **stays up with `-c npu`** — the August crash was `geniex infer`'s llama-create, not serve startup; actual chat inference not yet exercised through serve |
+| `geniex-serve-npu` | **chat proven 2026-11-08**: serves with `-c npu` and answers `/v1/chat/completions` **through the service proxy** after activate (200, Qwen3-0.6B reply) — August crash was `geniex infer`'s llama-create, not serve |
 | `win-cpu`          | up, health True, loading `C:\Users\Said\.cache\...` model, stop clean |
 | `win-npu-hexagon`  | **fails at HTP session open** (`0x80000406` -> `GGML_ASSERT(device)`, rc=9) — pre-QAIRT-2.50 build; GenieX v0.10.0 proves the hardware path works |
+| `wsl-all-8247`     | HEALTHY 2026-11-08 (direct smoke): health 200 + `/props` model Qwen3-0.6B, port 8094 |
+| `wsl-vulkan-10066` | HEALTHY 2026-11-08 (direct smoke): health 200 + `/props` — WSLg caveat does not affect server mode |
+| `geniex-serve-cpu` | HEALTHY 2026-11-08 via service: `health: true`, pid tracked, stop clean |
+| `win-opencl-cpu`   | HEALTHY 2026-11-08 via service: serves in 4 s (impl-DLL CPU build) |
+| `win-opencl-adreno` | HEALTHY 2026-11-08 via service: serves in 4 s on the Adreno/OpenCL path |
+| `win-npu-custom`   | **fails 2026-11-08** — same `0x80000406` -> `GGML_ASSERT(device)` as `win-npu-hexagon`; log endpoint shows it in one click |
 
 Notes captured in-run: `geniex serve` announces `v0.5.0 -> v0.10.0` via
 `geniex update` (official in-place upgrade — no manual path surgery needed).

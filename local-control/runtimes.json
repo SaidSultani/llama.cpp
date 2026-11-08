@@ -6,7 +6,12 @@
   "bench": {
     "exe": "C:\\Users\\Said\\GenieX\\geniex-bench-windows-arm64-v0.10.0\\bin\\geniex-bench.exe",
     "default_model": "unsloth/Qwen3-0.6B-GGUF:Q4_K_M",
-    "devices": ["cpu", "npu", "gpu", "hybrid"],
+    "devices": [
+      "cpu",
+      "npu",
+      "gpu",
+      "hybrid"
+    ],
     "results_dir": "bench-results"
   },
   "runtimes": [
@@ -162,6 +167,72 @@
       "health_host": "auto",
       "health_port": 18183,
       "notes": "Safe GenieX baseline on CPU."
+    },
+    {
+      "id": "win-opencl-cpu",
+      "label": "llama.cpp \u2014 Windows CPU build (impl-DLL layout)",
+      "kind": "llama",
+      "device": "cpu",
+      "platform": "windows",
+      "args": [
+        "C:\\Users\\Said\\llama-cpp-backends\\cpu-opencl-built\\llama-server.exe",
+        "-m",
+        "C:\\\\Users\\\\Said\\\\.cache\\\\geniex\\\\models\\\\unsloth\\\\Qwen3-0.6B-GGUF\\\\Qwen3-0.6B-Q4_K_M.gguf",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8196"
+      ],
+      "env_path": [
+        "C:\\Users\\Said\\llama-cpp-backends\\cpu-opencl-built"
+      ],
+      "health_host": "auto",
+      "health_port": 8196,
+      "notes": "llama-cpp-backends/cpu-opencl-built (impl-DLL layout; CPU only \u2014 NO ggml-opencl.dll on disk despite the dir name). Smoke 2026-11-08: HEALTHY, serves in 4s."
+    },
+    {
+      "id": "win-opencl-adreno",
+      "label": "llama.cpp \u2014 Windows OpenCL Adreno (GPU)",
+      "kind": "llama",
+      "device": "gpu",
+      "platform": "windows",
+      "args": [
+        "C:\\Users\\Said\\llama-cpp-backends\\opencl-adreno\\llama-server.exe",
+        "-m",
+        "C:\\\\Users\\\\Said\\\\.cache\\\\geniex\\\\models\\\\unsloth\\\\Qwen3-0.6B-GGUF\\\\Qwen3-0.6B-Q4_K_M.gguf",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8197"
+      ],
+      "env_path": [
+        "C:\\Users\\Said\\llama-cpp-backends\\opencl-adreno"
+      ],
+      "health_host": "auto",
+      "health_port": 8197,
+      "notes": "b10066 Adreno build (ggml-opencl + HTP skels v73/75/79 in-dir). Smoke 2026-11-08: HEALTHY, serves in 4s on Adreno path."
+    },
+    {
+      "id": "win-npu-custom",
+      "label": "llama.cpp \u2014 Windows QNN NPU (custom HTP)",
+      "kind": "llama",
+      "device": "npu",
+      "platform": "windows",
+      "args": [
+        "C:\\Users\\Said\\llama-cpp-backends\\npu-built\\llama-server.exe",
+        "-m",
+        "C:\\\\Users\\\\Said\\\\.cache\\\\geniex\\\\models\\\\unsloth\\\\Qwen3-0.6B-GGUF\\\\Qwen3-0.6B-Q4_K_M.gguf",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8198"
+      ],
+      "env_path": [
+        "C:\\Users\\Said\\llama-cpp-backends\\npu-built"
+      ],
+      "health_host": "auto",
+      "health_port": 8198,
+      "notes": "llama-cpp-backends/npu-built (ggml-hexagon-ours + custom catalogs, staged skels). VERIFIED FAILING 2026-11-08: same ggml-hex 0x80000406 -> GGML_ASSERT(device) as win-npu-hexagon \u2014 build predates the working QAIRT 2.50 stack; rebuild needed. Log endpoint shows it in one click."
     }
   ]
 }
