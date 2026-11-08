@@ -1,3 +1,4 @@
+import { CONTROL_ROUTE, CONTROL_ROUTE_ID } from './control.constants';
 import { MODEL_ICON } from './icons.constants';
 import {
 	SHORTCUT_MODELS,
@@ -6,7 +7,7 @@ import {
 	SHORTCUT_SETTINGS
 } from './keyboard-shortcuts.constants';
 import { MODELS_ROUTE_ID } from './routes.constants';
-import { Search, Settings, SquarePen } from '@lucide/svelte';
+import { Cpu, Search, Settings, SquarePen } from '@lucide/svelte';
 import McpLogo from '$lib/components/app/mcp/McpLogo.svelte';
 import { SidebarAction, ToolSource } from '$lib/enums';
 import type { DesktopIconStripItem } from '$lib/types';
@@ -113,6 +114,12 @@ export const SIDEBAR_ACTIONS_ITEMS: DesktopIconStripItem[] = [
 		action: SidebarAction.MCP,
 		icon: McpLogo,
 		tooltip: 'MCP'
+	},
+	{
+		activeRouteId: CONTROL_ROUTE_ID,
+		icon: Cpu,
+		route: CONTROL_ROUTE,
+		tooltip: 'Local AI'
 	},
 	{
 		action: SidebarAction.SETTINGS,

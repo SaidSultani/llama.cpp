@@ -1,5 +1,14 @@
 {
   "_comment": "Runtime inventory for the local-control service. Paths verified 2026-11-08 by size + --version probe. Model store = WINDOWS-side C:\\Users\\Said\\.cache\\geniex (geniex CLI cache; the WSL home has no cache \u2014 WSL runtimes reach the same files via /mnt/c).",
+  "model_dirs": [
+    "/mnt/c/Users/Said/.cache/geniex/models"
+  ],
+  "bench": {
+    "exe": "C:\\Users\\Said\\GenieX\\geniex-bench-windows-arm64-v0.10.0\\bin\\geniex-bench.exe",
+    "default_model": "unsloth/Qwen3-0.6B-GGUF:Q4_K_M",
+    "devices": ["cpu", "npu", "gpu", "hybrid"],
+    "results_dir": "bench-results"
+  },
   "runtimes": [
     {
       "id": "wsl-cpu-b9189",

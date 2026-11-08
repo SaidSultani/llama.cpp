@@ -28,19 +28,23 @@ today lets you pick among those from one UI.
 ### Phase 1 — ours (stays in this fork)
 
 0. **Control service — DONE 2026-11-08**: `local-control/` (stdlib HTTP, 8 runtimes in
-   `runtimes.json`, 5/5 unit tests, live smoke on 5 real runtimes incl. the captured
-   Hexagon `0x80000406` failure — see its README for the evidence table).
-1. **Control service** (small local HTTP service): start/stop llama-server
-   builds and `geniex serve` with the right backend flags, expose active
-   runtime + device to the UI.
-2. **Device/runtime selector page** in llama-ui: CPU / Adreno OpenCL / Hexagon
-   QNN / GenieX (llama_cpp or qairt plugin × cpu|gpu|npu|hybrid|auto).
-3. **Model store panel**: merge `~/.cache/geniex` (model-manager ids) with
-   local GGUF directories; show RAM fit.
-4. **Bench panel**: run `geniex-bench` cells and chart TTFT / prefill / decode
-   per device. Baseline measured 2026-11-08 (Qwen3-0.6B Q4_K_M:
-   cpu 460/22.7, npu 2275/31.1, hybrid 1156/45.6, gpu 873/50.1 t/s
+   `runtimes.json`, 10/10 unit tests, live smoke on 5 real runtimes incl. the captured
+   Hexagon `0x80000406` failure — see its README for the evidence table). It serves the
+   built UI as an SPA, proxies `/v1/*` + `/props`/`/slots`/`/metrics` to the active
+   runtime, and exposes `/ctl/models` + `/bench`.
+1. **Device/runtime selector page — DONE 2026-11-08**: `tools/ui/src/routes/control/`
+   ("Local AI" sidebar entry, hash route `#/control`): start/stop/activate runtimes
+   with per-runtime log tails and an error banner.
+2. **Model store panel — DONE 2026-11-08**: `/ctl/models` merges the GenieX
+   model-manager cache with GGUF dirs (vocab filter + RAM fit), rendered on the
+   control page.
+3. **Bench panel — DONE 2026-11-08**: `POST /bench` runs `geniex-bench` (PowerShell +
+   registry-PATH spawn) and the page lists the results. Baseline measured 2026-11-08
+   (Qwen3-0.6B Q4_K_M: cpu 460/22.7, npu 2275/31.1, hybrid 1156/45.6, gpu 873/50.1 t/s
    prefill/decode, HTP0 confirmed on v0.10.0).
+4. **End-to-end launch — DONE 2026-11-08**: Playwright E2E rc=0 — control-page button
+   cycle (start/stop/activate, every POST 200) then chat through the proxy streamed
+   from llama-server into the forked UI; post-readiness console clean.
 
 ### Phase 2 — upstream candidates (we will offer these back)
 

@@ -3,6 +3,7 @@
 
 export * from './agentic.constants';
 export * from './api-endpoints.constants';
+export * from './control.constants';
 export * from './app.constants';
 export * from './backend.constants';
 export * from './chat-tabs.constants';
