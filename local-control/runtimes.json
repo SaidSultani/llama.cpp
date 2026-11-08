@@ -1,0 +1,158 @@
+{
+  "_comment": "Runtime inventory for the local-control service. Paths verified 2026-11-08 by size + --version probe. Model store = WINDOWS-side C:\\Users\\Said\\.cache\\geniex (geniex CLI cache; the WSL home has no cache \u2014 WSL runtimes reach the same files via /mnt/c).",
+  "runtimes": [
+    {
+      "id": "wsl-cpu-b9189",
+      "label": "llama.cpp b9189 \u2014 WSL CPU",
+      "kind": "llama",
+      "device": "cpu",
+      "platform": "linux",
+      "args": [
+        "/home/said/llama.cpp/build-b9189/bin/llama-server",
+        "-m",
+        "/mnt/c/Users/Said/.cache/geniex/models/unsloth/Qwen3-0.6B-GGUF/Qwen3-0.6B-Q4_K_M.gguf",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8093"
+      ],
+      "health_host": "127.0.0.1",
+      "health_port": 8093,
+      "notes": "version 9189 (64b38b561), verified runs. Baseline reference runtime."
+    },
+    {
+      "id": "wsl-all-8247",
+      "label": "llama.cpp b8247 all-backends \u2014 WSL",
+      "kind": "llama",
+      "device": "multi",
+      "platform": "linux",
+      "args": [
+        "/home/said/llama.cpp/build-all/bin/llama-server",
+        "-m",
+        "/mnt/c/Users/Said/.cache/geniex/models/unsloth/Qwen3-0.6B-GGUF/Qwen3-0.6B-Q4_K_M.gguf",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8094"
+      ],
+      "health_host": "127.0.0.1",
+      "health_port": 8094,
+      "notes": "version 8247 (ae87863dc). Older build with multiple compiled backends."
+    },
+    {
+      "id": "wsl-vulkan-10066",
+      "label": "llama.cpp b10066 Vulkan \u2014 WSL",
+      "kind": "llama",
+      "device": "vulkan",
+      "platform": "linux",
+      "args": [
+        "/home/said/llama.cpp/build-vulkan/bin/llama-server",
+        "-m",
+        "/mnt/c/Users/Said/.cache/geniex/models/unsloth/Qwen3-0.6B-GGUF/Qwen3-0.6B-Q4_K_M.gguf",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8095"
+      ],
+      "health_host": "127.0.0.1",
+      "health_port": 8095,
+      "notes": "version 10066 (86a9c79f8). CAVEAT: WSLg renders on a virtual display and GUI/Vulkan on WSL is unreliable on this box \u2014 probe before trusting."
+    },
+    {
+      "id": "win-cpu",
+      "label": "llama.cpp \u2014 Windows ARM64 CPU",
+      "kind": "llama",
+      "device": "cpu",
+      "platform": "windows",
+      "args": [
+        "C:\\Users\\Said\\llama-cpp-build\\bin\\llama-server.exe",
+        "-m",
+        "C:\\Users\\Said\\.cache\\geniex\\models\\unsloth\\Qwen3-0.6B-GGUF\\Qwen3-0.6B-Q4_K_M.gguf",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8096"
+      ],
+      "env_path": [
+        "C:\\Users\\Said\\llama-cpp-build\\bin"
+      ],
+      "health_host": "auto",
+      "health_port": 8096,
+      "notes": "Clang ARM64 CPU build (build-llama.ps1, GGML_VULKAN=OFF). Binds 0.0.0.0 so WSL can probe via gateway. Model via WSL UNC path."
+    },
+    {
+      "id": "win-npu-hexagon",
+      "label": "llama.cpp \u2014 Windows Hexagon QNN (NPU)",
+      "kind": "llama",
+      "device": "npu",
+      "platform": "windows",
+      "args": [
+        "C:\\Users\\Said\\llama_cpp_hexagon\\build-win\\bin\\llama-server.exe",
+        "-m",
+        "C:\\Users\\Said\\.cache\\geniex\\models\\unsloth\\Qwen3-0.6B-GGUF\\Qwen3-0.6B-Q4_K_M.gguf",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8097"
+      ],
+      "env_path": [
+        "C:\\Users\\Said\\llama_cpp_hexagon\\build-win\\bin"
+      ],
+      "health_host": "auto",
+      "health_port": 8097,
+      "notes": "VERIFIED FAILING 2026-11-08: ggml-hex 'failed to open session 0: error 0x80000406' -> GGML_ASSERT(device) rc=9. Build predates the working stack (GenieX v0.10.0 / QAIRT 2.50 runs HTP0 fine) \u2014 needs a rebuild against QAIRT 2.50 + current skels/certs. The log endpoint is how we know this in one click."
+    },
+    {
+      "id": "geniex-serve",
+      "label": "GenieX serve \u2014 default compute",
+      "kind": "geniex",
+      "device": "default",
+      "platform": "windows",
+      "args": [
+        "C:\\Users\\Said\\AppData\\Local\\GenieX CLI\\geniex.exe",
+        "serve",
+        "--host",
+        "0.0.0.0:18181"
+      ],
+      "health_host": "auto",
+      "health_port": 18181,
+      "notes": "GenieX CLI v0.5.0 OpenAI-compatible server. Model chosen per request (model id from ~/.cache/geniex). Compute default unless -c passed."
+    },
+    {
+      "id": "geniex-serve-npu",
+      "label": "GenieX serve \u2014 compute NPU",
+      "kind": "geniex",
+      "device": "npu",
+      "platform": "windows",
+      "args": [
+        "C:\\Users\\Said\\AppData\\Local\\GenieX CLI\\geniex.exe",
+        "serve",
+        "--host",
+        "0.0.0.0:18182",
+        "-c",
+        "npu"
+      ],
+      "health_host": "auto",
+      "health_port": 18182,
+      "notes": "v0.5.0 -c npu died on GGML_ASSERT(device) in `infer` in August \u2014 serve may behave differently; start and read the log to learn the truth. The v0.10.0 bench proves HTP works (HTP0)."
+    },
+    {
+      "id": "geniex-serve-cpu",
+      "label": "GenieX serve \u2014 compute CPU",
+      "kind": "geniex",
+      "device": "cpu",
+      "platform": "windows",
+      "args": [
+        "C:\\Users\\Said\\AppData\\Local\\GenieX CLI\\geniex.exe",
+        "serve",
+        "--host",
+        "0.0.0.0:18183",
+        "-c",
+        "cpu"
+      ],
+      "health_host": "auto",
+      "health_port": 18183,
+      "notes": "Safe GenieX baseline on CPU."
+    }
+  ]
+}

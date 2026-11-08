@@ -27,6 +27,9 @@ today lets you pick among those from one UI.
 
 ### Phase 1 — ours (stays in this fork)
 
+0. **Control service — DONE 2026-11-08**: `local-control/` (stdlib HTTP, 8 runtimes in
+   `runtimes.json`, 5/5 unit tests, live smoke on 5 real runtimes incl. the captured
+   Hexagon `0x80000406` failure — see its README for the evidence table).
 1. **Control service** (small local HTTP service): start/stop llama-server
    builds and `geniex serve` with the right backend flags, expose active
    runtime + device to the UI.
