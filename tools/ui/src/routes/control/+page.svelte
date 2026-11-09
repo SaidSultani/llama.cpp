@@ -230,7 +230,7 @@
 			</p>
 		</div>
 
-		<div class="ml-auto flex shrink-0 items-center gap-2">
+		<div class="ml-auto flex flex-wrap items-center justify-end gap-2">
 			{#if chatReady && activeRuntime}
 				<Button
 					href="#/"
